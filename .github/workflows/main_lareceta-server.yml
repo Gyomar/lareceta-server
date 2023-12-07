@@ -60,3 +60,15 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_465E7DAD8DDD4ABF9871411129191632 }}
           package: .
+
+      - name: Set up Node.js version
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+
+      - name: Iniciar la migracion de la base de datos
+        env:
+          DB_URL: ${{ secrets.DB_URL }}
+        run: |
+          npm run migra:run
+
