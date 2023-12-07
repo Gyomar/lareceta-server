@@ -12,8 +12,6 @@ app.use(express.static('src'))
 app.use(cors());
 app.use(express.json());
 
-require('./utils/auth');
-
 routerApi(app);
 
 app.use(logErrors);
