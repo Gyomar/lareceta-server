@@ -10,14 +10,6 @@ class EncuesSatisIlfornoService {
     return nuevaEncuesta;
   }
 
-  async count() {
-    const contarData = await models.EncuesSatisIlforno.count();
-    if (!contarData) {
-      throw boom.notFound('encuesta no encontrada');
-    }
-    return contarData;
-  }
-
   async find(query) {
     const opciones = {};
     const { limit, offset } = query;
@@ -27,9 +19,14 @@ class EncuesSatisIlfornoService {
     }
     const data = await models.EncuesSatisIlforno.findAll(opciones);
     if(!data){
-      throw boom.notFound('enciestas no encontradas');
+      throw boom.notFound('encuestas no encontradas');
     }
-    return data
+    const cleanedData = data.map(item => {
+      const { nombre, apellido, cedula, celular, email, ...rest } = item.dataValues;
+      return { ...rest };
+    });
+  
+    return cleanedData;
   }
 
   async findOne(id) {
@@ -37,14 +34,13 @@ class EncuesSatisIlfornoService {
     if (!encuesta) {
       throw boom.notFound('encuesta no encontrada');
     }
-    return encuesta;
+    const cleanedData = encuesta.map(item => {
+      const { nombre, apellido, cedula, celular, email, ...rest } = item.dataValues;
+      return { ...rest };
+    });
+    return cleanedData;
   }
 
-  async delete(id) {
-    const encuesta = await this.findOne(id);
-    await encuesta.destroy();
-    return { id };
-  }
 }
 
 module.exports = EncuesSatisIlfornoService;
